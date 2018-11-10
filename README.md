@@ -1,12 +1,12 @@
-## og-zippyshare-dl
+# og-zippyshare-dl
 
-Small console app to automate downloading of files from ZippyShare
+Small C# .net core console app to automate downloading of files from ZippyShare.
 
 WIP
 
-### TODO
+## TODO
 
-Read list of URLS from text file to parse for file download URIs.
+~~Read list of URLS from text file to parse for file download URIs.~~
 
 Concurrent Downloads
 
