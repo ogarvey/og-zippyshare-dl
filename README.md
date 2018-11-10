@@ -14,6 +14,8 @@ Where urlList is a text file containing one URL per line to parse for the downlo
 
 ~~Read list of URLS from text file to parse for file download URIs.~~
 
+Add error handling
+
 Display progress
 
 Concurrent Downloads
