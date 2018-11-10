@@ -14,27 +14,51 @@ namespace og_zippyshare_dl
         {
             Console.WriteLine("Starting Scrape...");
 
-            var uri = new Uri("https://www95.zippyshare.com/v/z6d4IDII/file.html");
+            var listFile = File.OpenRead(args[0]);
 
-            var webRequest = System.Net.WebRequest.Create(uri);
+            int counter = 0;
+            string line;
+            List<string> urlList = new List<string>();
 
-            using (var response = webRequest.GetResponse())
+            // Read the file line by line and add url to urlList
+            StreamReader file = new StreamReader(listFile);
+            while ((line = file.ReadLine()) != null)
             {
-                using (var stream = response.GetResponseStream())
+                urlList.Add(line);
+                counter++;
+            }
+
+            file.Close();
+
+            DownloadFiles(urlList);
+        }
+
+        static void DownloadFiles(List<string> urlList)
+        {
+            foreach (var url in urlList)
+            {
+                var uri = new Uri(url);
+
+                var webRequest = System.Net.WebRequest.Create(uri);
+
+                using (var response = webRequest.GetResponse())
                 {
-                    using (var reader = new StreamReader(stream))
+                    using (var stream = response.GetResponseStream())
                     {
-                        var html = reader.ReadToEnd();
-                        var scraper = new ZippyScraper(html);
-
-                        var download = scraper.GetDownloadURL();
-                        var downloadUrl =  $"https://{uri.Host}" + download.URL;
-                        using (var client = new System.Net.WebClient())
+                        using (var reader = new StreamReader(stream))
                         {
-                            client.DownloadFile(downloadUrl, $"G:\\Downloads\\{download.FileName}");
-                        }
+                            var html = reader.ReadToEnd();
+                            var scraper = new ZippyScraper(html);
 
-                        Console.WriteLine($"Download URL is: {downloadUrl} ...");
+                            var download = scraper.GetDownloadURL();
+                            var downloadUrl = $"https://{uri.Host}" + download.URL;
+                            using (var client = new System.Net.WebClient())
+                            {
+                                client.DownloadFile(downloadUrl, $"C:\\Downloads\\{download.FileName}");
+                            }
+
+                            Console.WriteLine($"Download URL is: {downloadUrl} ...");
+                        }
                     }
                 }
             }
